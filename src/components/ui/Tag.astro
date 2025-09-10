@@ -1,0 +1,27 @@
+---
+export interface Props {
+  variant?: 'primary' | 'secondary' | 'accent' | 'neutral';
+  size?: 'sm' | 'md';
+  class?: string;
+}
+
+const { variant = 'primary', size = 'sm', class: className = '' } = Astro.props;
+
+const variants = {
+  primary: 'bg-primary/10 text-primary',
+  secondary: 'bg-atlantic/10 text-atlantic',
+  accent: 'bg-salicornes/10 text-salicornes',
+  neutral: 'bg-sand-200 text-dark'
+};
+
+const sizes = {
+  sm: 'px-3 py-1 text-sm',
+  md: 'px-4 py-2 text-base'
+};
+
+const classes = `inline-flex items-center rounded-full font-medium ${variants[variant]} ${sizes[size]} ${className}`;
+---
+
+<span class={classes}>
+  <slot />
+</span>

@@ -1,0 +1,201 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+import Tag from '@/components/ui/Tag.astro';
+import Button from '@/components/ui/Button.astro';
+import { projectsData } from '@/data/projects';
+import { Filter, ExternalLink } from 'lucide-astro';
+
+const title = 'Mes Projets';
+const description = 'Découvrez mes réalisations en sensibilisation environnementale, cartographie et communication visuelle pour la protection du littoral.';
+
+// Extract unique tags for filtering
+const allTags = [...new Set(projectsData.flatMap(project => project.tags))];
+---
+
+<Layout title={title} description={description}>
+  <div class="min-h-screen bg-gradient-to-br from-cream via-sand-50 to-sand-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-cream/90 backdrop-blur-sm z-50 border-b border-sand-200">
+      <Container class="py-4">
+        <div class="flex items-center justify-between">
+          <a href="/" class="font-display font-bold text-xl text-primary hover:text-sand-600 transition-colors">
+            Maëlle Langlais
+          </a>
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="/parcours" class="text-dark hover:text-primary transition-colors">Parcours</a>
+            <a href="/projets" class="text-primary font-medium">Projets</a>
+            <a href="/contact" class="text-dark hover:text-primary transition-colors">Contact</a>
+          </div>
+        </div>
+      </Container>
+    </nav>
+
+    <Section class="pt-32 pb-20">
+      <Container>
+        <!-- Header -->
+        <div class="text-center mb-16">
+          <h1 class="font-display text-4xl md:text-5xl font-bold text-dark mb-6">
+            Mes Projets
+          </h1>
+          <p class="text-xl text-dark/80 max-w-3xl mx-auto leading-relaxed">
+            Une sélection de mes réalisations en sensibilisation environnementale, 
+            cartographie et communication visuelle pour la protection du littoral.
+          </p>
+        </div>
+
+        <!-- Filters -->
+        <div class="mb-12">
+          <div class="flex items-center gap-4 mb-6">
+            <Filter class="w-5 h-5 text-dark/60" />
+            <span class="text-dark/60 font-medium">Filtrer par :</span>
+          </div>
+          <div class="flex flex-wrap gap-2" id="filter-tags">
+            <button class="filter-tag active px-4 py-2 bg-primary text-white rounded-full text-sm font-medium transition-colors" data-tag="all">
+              Tous
+            </button>
+            {allTags.map(tag => (
+              <button 
+                class="filter-tag px-4 py-2 bg-white border border-sand-200 text-dark hover:bg-primary hover:text-white rounded-full text-sm font-medium transition-colors"
+                data-tag={tag}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+          {projectsData.map(project => (
+            <article 
+              class="project-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+              data-tags={project.tags.join(',')}
+            >
+              <div class="aspect-video bg-sand-200 relative overflow-hidden">
+                <img 
+                  src={project.cover} 
+                  alt={project.title}
+                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  loading="lazy"
+                />
+                {project.featured && (
+                  <div class="absolute top-4 left-4">
+                    <Tag variant="primary">À la une</Tag>
+                  </div>
+                )}
+              </div>
+              
+              <div class="p-6">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  {project.tags.slice(0, 3).map(tag => (
+                    <Tag variant="neutral" size="sm">{tag}</Tag>
+                  ))}
+                  {project.tags.length > 3 && (
+                    <Tag variant="neutral" size="sm">+{project.tags.length - 3}</Tag>
+                  )}
+                </div>
+                
+                <h3 class="font-display text-lg font-semibold text-dark mb-2 leading-tight">
+                  {project.title}
+                </h3>
+                
+                <p class="text-dark/70 text-sm leading-relaxed mb-4">
+                  {project.summary}
+                </p>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-primary font-medium text-sm">{project.year}</span>
+                  <Button href={`/projets/${project.slug}`} variant="outline" size="sm">
+                    Voir le projet
+                  </Button>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <!-- No results message -->
+        <div id="no-results" class="hidden text-center py-20">
+          <p class="text-dark/60 text-lg">Aucun projet trouvé pour cette catégorie.</p>
+          <Button 
+            variant="outline" 
+            class="mt-4" 
+            onclick="resetFilters()"
+          >
+            Voir tous les projets
+          </Button>
+        </div>
+      </Container>
+    </Section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12">
+      <Container>
+        <div class="text-center">
+          <h3 class="font-display font-bold text-xl text-primary mb-4">Intéressé·e par mes réalisations ?</h3>
+          <p class="text-white/70 mb-6">Discutons de votre projet et voyons comment je peux vous accompagner.</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/contact" class="inline-flex items-center justify-center px-6 py-3 border-2 border-white text-white rounded-2xl hover:bg-white hover:text-dark transition-colors">
+              Me contacter
+            </a>
+          </div>
+        </div>
+      </Container>
+    </footer>
+  </div>
+
+  <script>
+    // Filter functionality
+    function initializeFilters() {
+      const filterTags = document.querySelectorAll('.filter-tag');
+      const projectCards = document.querySelectorAll('.project-card');
+      const noResults = document.getElementById('no-results');
+
+      filterTags.forEach(tag => {
+        tag.addEventListener('click', () => {
+          const selectedTag = tag.dataset.tag;
+          
+          // Update active state
+          filterTags.forEach(t => t.classList.remove('active', 'bg-primary', 'text-white'));
+          filterTags.forEach(t => t.classList.add('bg-white', 'border', 'border-sand-200', 'text-dark'));
+          
+          tag.classList.add('active', 'bg-primary', 'text-white');
+          tag.classList.remove('bg-white', 'border', 'border-sand-200', 'text-dark');
+
+          // Filter projects
+          let visibleCount = 0;
+          projectCards.forEach(card => {
+            const cardTags = card.dataset.tags.split(',');
+            const shouldShow = selectedTag === 'all' || cardTags.includes(selectedTag);
+            
+            if (shouldShow) {
+              card.style.display = 'block';
+              visibleCount++;
+            } else {
+              card.style.display = 'none';
+            }
+          });
+
+          // Show/hide no results message
+          if (visibleCount === 0) {
+            noResults.classList.remove('hidden');
+          } else {
+            noResults.classList.add('hidden');
+          }
+        });
+      });
+    }
+
+    function resetFilters() {
+      const allButton = document.querySelector('[data-tag="all"]');
+      if (allButton) {
+        allButton.click();
+      }
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initializeFilters);
+  </script>
+</Layout>

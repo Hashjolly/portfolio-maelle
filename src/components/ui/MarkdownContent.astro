@@ -1,0 +1,120 @@
+---
+import { marked } from 'marked';
+
+interface Props {
+  content: string;
+  class?: string;
+}
+
+const { content, class: className = '' } = Astro.props;
+
+// Configuration de Marked pour une sortie sécurisée
+marked.setOptions({
+  breaks: true, // Convertit les retours à la ligne en <br>
+  gfm: true, // GitHub Flavored Markdown
+});
+
+const htmlContent = marked(content);
+---
+
+<div 
+  class={`prose prose-dark max-w-none ${className}`}
+  set:html={htmlContent}
+/>
+
+<style is:global>
+  .prose {
+    color: rgb(55 65 81 / 0.8); /* text-dark/80 */
+    line-height: 1.75; /* leading-relaxed */
+  }
+  
+  .prose p {
+    margin-bottom: 1rem;
+  }
+  
+  .prose p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .prose strong {
+    font-weight: 600;
+    color: rgb(55 65 81); /* text-dark */
+  }
+  
+  .prose em {
+    font-style: italic;
+  }
+  
+  .prose ul {
+    list-style-type: disc !important;
+    list-style-position: outside !important;
+    margin-left: 0 !important;
+    padding-left: 1.5rem !important;
+    margin-bottom: 1rem;
+  }
+  
+  .prose ol {
+    list-style-type: decimal !important;
+    list-style-position: outside !important;
+    margin-left: 0 !important;
+    padding-left: 1.5rem !important;
+    margin-bottom: 1rem;
+  }
+  
+  .prose li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .prose blockquote {
+    border-left: 4px solid #DB8F75; /* primary color */
+    padding-left: 1rem;
+    font-style: italic;
+    margin: 1rem 0;
+    color: rgb(55 65 81 / 0.9);
+  }
+  
+  .prose h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: rgb(55 65 81);
+    margin: 1.5rem 0 0.75rem 0;
+  }
+  
+  .prose h4 {
+    font-weight: 600;
+    color: rgb(55 65 81);
+    margin: 1rem 0 0.5rem 0;
+  }
+
+  .prose h1, .prose h2 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: rgb(55 65 81);
+    margin: 2rem 0 1rem 0;
+  }
+
+  .prose h1 {
+    font-size: 1.5rem;
+  }
+
+  .prose h2 {
+    font-size: 1.25rem;
+  }
+
+  .prose code {
+    background-color: rgb(243 244 246);
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+  }
+
+  .prose a {
+    color: #DB8F75;
+    text-decoration: underline;
+  }
+
+  .prose a:hover {
+    color: #c17d66;
+  }
+</style>

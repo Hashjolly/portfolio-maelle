@@ -1,0 +1,159 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+import Tag from '@/components/ui/Tag.astro';
+import { timelineData } from '@/data/timeline';
+import { aboutData } from '@/data/about';
+import { MapPin, Calendar, Award } from 'lucide-astro';
+
+const title = 'Parcours & Expérience';
+const description = 'Découvrez mon parcours académique et professionnel en géographie, spécialisé en tourisme durable et gestion du littoral.';
+---
+
+<Layout title={title} description={description}>
+  <div class="min-h-screen bg-gradient-to-br from-cream via-sand-50 to-sand-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-cream/90 backdrop-blur-sm z-50 border-b border-sand-200">
+      <Container class="py-4">
+        <div class="flex items-center justify-between">
+          <a href="/" class="font-display font-bold text-xl text-primary hover:text-sand-600 transition-colors">
+            Maëlle Langlais
+          </a>
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="/parcours" class="text-primary font-medium">Parcours</a>
+            <a href="/projets" class="text-dark hover:text-primary transition-colors">Projets</a>
+            <a href="/contact" class="text-dark hover:text-primary transition-colors">Contact</a>
+          </div>
+        </div>
+      </Container>
+    </nav>
+
+    <Section class="pt-32 pb-20">
+      <Container>
+        <!-- Header -->
+        <div class="text-center mb-16">
+          <h1 class="font-display text-4xl md:text-5xl font-bold text-dark mb-6">
+            Mon Parcours
+          </h1>
+          <p class="text-xl text-dark/80 max-w-3xl mx-auto leading-relaxed">
+            {aboutData.longBio}
+          </p>
+        </div>
+
+        <!-- Skills & Tools -->
+        <div class="grid md:grid-cols-3 gap-8 mb-20">
+          <div class="bg-white p-8 rounded-2xl shadow-sm">
+            <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
+              <Award class="w-6 h-6 text-primary" />
+            </div>
+            <h3 class="font-display text-xl font-semibold text-dark mb-4">Compétences</h3>
+            <div class="flex flex-wrap gap-2">
+              {aboutData.skills.map(skill => (
+                <Tag variant="primary" size="sm">{skill}</Tag>
+              ))}
+            </div>
+          </div>
+
+          <div class="bg-white p-8 rounded-2xl shadow-sm">
+            <div class="w-12 h-12 bg-atlantic/10 rounded-lg flex items-center justify-center mb-6">
+              <MapPin class="w-6 h-6 text-atlantic" />
+            </div>
+            <h3 class="font-display text-xl font-semibold text-dark mb-4">Outils</h3>
+            <div class="flex flex-wrap gap-2">
+              {aboutData.tools.map(tool => (
+                <Tag variant="secondary" size="sm">{tool}</Tag>
+              ))}
+            </div>
+          </div>
+
+          <div class="bg-white p-8 rounded-2xl shadow-sm">
+            <div class="w-12 h-12 bg-salicornes/10 rounded-lg flex items-center justify-center mb-6">
+              <Calendar class="w-6 h-6 text-salicornes" />
+            </div>
+            <h3 class="font-display text-xl font-semibold text-dark mb-4">Langues</h3>
+            <div class="space-y-2">
+              {aboutData.languages.map(lang => (
+                <div class="flex justify-between items-center">
+                  <span class="text-dark font-medium">{lang.name}</span>
+                  <span class="text-dark/60 text-sm">{lang.level}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="max-w-4xl mx-auto">
+          <h2 class="font-display text-3xl font-bold text-dark mb-12 text-center">
+            Timeline
+          </h2>
+          
+          <div class="relative">
+            <!-- Timeline line -->
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-1 bg-sand-200 h-full"></div>
+            
+            <div class="space-y-12">
+              {timelineData.map((event, index) => (
+                <div class={`relative flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
+                  <!-- Timeline dot -->
+                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-4 border-cream z-10"></div>
+                  
+                  <!-- Content -->
+                  <div class={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-right' : 'pl-8 text-left'}`}>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm">
+                      <div class="flex items-center gap-2 mb-2">
+                        <span class="font-bold text-primary text-lg">{event.year}</span>
+                        <Tag 
+                          variant={event.type === 'education' ? 'primary' : event.type === 'experience' ? 'secondary' : 'accent'}
+                          size="sm"
+                        >
+                          {event.type === 'education' ? 'Formation' : event.type === 'experience' ? 'Expérience' : 'Certification'}
+                        </Tag>
+                      </div>
+                      <h3 class="font-display text-lg font-semibold text-dark mb-2">
+                        {event.title}
+                      </h3>
+                      <div class="flex items-center text-dark/60 text-sm mb-3">
+                        <MapPin class="w-4 h-4 mr-1" />
+                        {event.location}
+                      </div>
+                      <p class="text-dark/80 text-sm leading-relaxed mb-3">
+                        {event.description}
+                      </p>
+                      {event.tags && (
+                        <div class="flex flex-wrap gap-1">
+                          {event.tags.map(tag => (
+                            <Tag variant="neutral" size="sm">{tag}</Tag>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </Container>
+    </Section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12">
+      <Container>
+        <div class="text-center">
+          <h3 class="font-display font-bold text-xl text-primary mb-4">Prêt·e à collaborer ?</h3>
+          <p class="text-white/70 mb-6">Découvrez mes projets ou contactez-moi pour discuter de vos besoins.</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/projets" class="inline-flex items-center justify-center px-6 py-3 bg-primary text-white rounded-2xl hover:bg-sand-600 transition-colors">
+              Voir mes projets
+            </a>
+            <a href="/contact" class="inline-flex items-center justify-center px-6 py-3 border-2 border-white text-white rounded-2xl hover:bg-white hover:text-dark transition-colors">
+              Me contacter
+            </a>
+          </div>
+        </div>
+      </Container>
+    </footer>
+  </div>
+</Layout>

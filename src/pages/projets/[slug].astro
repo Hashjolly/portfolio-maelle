@@ -1,0 +1,540 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+import Tag from '@/components/ui/Tag.astro';
+import Button from '@/components/ui/Button.astro';
+import MarkdownContent from '@/components/ui/MarkdownContent.astro';
+import { projectsData, getProjectBySlug } from '@/data/projects';
+import { ArrowLeft, ExternalLink, Calendar, User, Target, Film } from 'lucide-astro';
+
+export async function getStaticPaths() {
+  return projectsData.map(project => ({
+    params: { slug: project.slug },
+    props: { project }
+  }));
+}
+
+const { slug } = Astro.params;
+const { project } = Astro.props;
+
+if (!project) {
+  return Astro.redirect('/404');
+}
+
+const title = project.title;
+const description = project.summary;
+---
+
+<Layout title={title} description={description} image={project.cover}>
+  <div class="min-h-screen bg-gradient-to-br from-cream via-sand-50 to-sand-100">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-cream/90 backdrop-blur-sm z-50 border-b border-sand-200">
+      <Container class="py-4">
+        <div class="flex items-center justify-between">
+          <a href="/" class="font-display font-bold text-xl text-primary hover:text-sand-600 transition-colors">
+            Maëlle Langlais
+          </a>
+          <div class="hidden md:flex items-center space-x-8">
+            <a href="/parcours" class="text-dark hover:text-primary transition-colors">Parcours</a>
+            <a href="/projets" class="text-primary font-medium">Projets</a>
+            <a href="/contact" class="text-dark hover:text-primary transition-colors">Contact</a>
+          </div>
+        </div>
+      </Container>
+    </nav>
+
+    <Section class="pt-32 pb-20">
+      <Container>
+        <!-- Back Button -->
+        <div class="mb-8">
+          <Button href="/projets" variant="outline" size="sm">
+            <ArrowLeft class="w-4 h-4" />
+            Retour aux projets
+          </Button>
+        </div>
+
+        <div class="max-w-4xl mx-auto">
+          <!-- Header -->
+          <div class="text-center mb-12">
+            <div class="flex flex-wrap gap-2 justify-center mb-4">
+              {project.tags.map(tag => (
+                <Tag variant="primary" size="sm">{tag}</Tag>
+              ))}
+            </div>
+            
+            <h1 class="font-display text-3xl md:text-4xl font-bold text-dark mb-4">
+              {project.title}
+            </h1>
+            
+            <p class="text-xl text-dark/80 mb-6 leading-relaxed">
+              {project.summary}
+            </p>
+            
+            <div class="flex items-center justify-center gap-6 text-dark/60">
+              <div class="flex items-center gap-2">
+                <Calendar class="w-4 h-4" />
+                <span>{project.year}</span>
+              </div>
+              {project.featured && (
+                <Tag variant="primary" size="sm">Projet phare</Tag>
+              )}
+            </div>
+          </div>
+
+          <!-- Cover Image -->
+          <div class="mb-12">
+            <div class="aspect-video bg-sand-200 rounded-2xl overflow-hidden shadow-lg">
+              <img 
+                src={project.cover} 
+                alt={project.title}
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
+
+          <!-- Project Details -->
+            <div class={`${ project.links ? 'grid md:grid-cols-3 gap-8 mb-12' : 'flex flex-col justify-center gap-2 mb-6'}`}>
+            {/* Synopsis */}
+            {project.synopsis && (
+              <div class={(!project.contributions && !project.outcomes && !project.links) ? 'max-w-xl mx-auto md:col-span-3' : 'md:col-span-2'}>
+                <div class="bg-white p-8 rounded-2xl shadow-sm mb-8">
+                  <div class="flex items-center gap-3 mb-4">
+                    <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                      <Film class="w-4 h-4 text-purple" />
+                    </div>
+                    <h2 class="font-display text-xl font-semibold text-dark">Synopsis</h2>
+                  </div>
+                  <p class="text-dark/80 leading-relaxed">
+                    <MarkdownContent content={project.synopsis || ''} />
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Context */}
+            <div class={(!project.contributions && !project.outcomes && !project.links) ? 'max-w-xl mx-auto md:col-span-3' : 'md:col-span-2'}>
+              <div class="bg-white p-8 rounded-2xl shadow-sm mb-8">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                <Target class="w-4 h-4 text-primary" />
+                </div>
+                <h2 class="font-display text-xl font-semibold text-dark">Contexte</h2>
+              </div>
+              <p class="text-dark/80 leading-relaxed">
+                <MarkdownContent content={project.context || ''} />
+              </p>
+              </div>
+
+              {project.outcomes && (
+              <div class="bg-white p-8 rounded-2xl shadow-sm">
+                <div class="flex items-center gap-3 mb-4">
+                <div class="w-8 h-8 bg-salicornes/10 rounded-lg flex items-center justify-center">
+                  <Target class="w-4 h-4 text-salicornes" />
+                </div>
+                <h2 class="font-display text-xl font-semibold text-dark">Résultats</h2>
+                </div>
+                <ul class="space-y-2">
+                {project.outcomes.map(outcome => (
+                  <li class="flex items-start gap-2 text-dark/80">
+                  <span class="w-1.5 h-1.5 bg-salicornes rounded-full mt-2 flex-shrink-0"></span>
+                  {outcome}
+                  </li>
+                ))}
+                </ul>
+              </div>
+              )}
+            </div>
+
+            {/* Sidebar */}
+            {(project.contributions || project.links) && (
+              <div class="space-y-6">
+              {/* Contributions */}
+              {project.contributions && (
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="w-8 h-8 bg-atlantic/10 rounded-lg flex items-center justify-center">
+                  <User class="w-4 h-4 text-atlantic" />
+                  </div>
+                  <h3 class="font-display font-semibold text-dark">Mes contributions</h3>
+                </div>
+                <ul class="space-y-2">
+                  {project.contributions.map(contribution => (
+                  <li class="flex items-start gap-2 text-sm text-dark/80">
+                    <span class="w-1.5 h-1.5 bg-atlantic rounded-full mt-1.5 flex-shrink-0"></span>
+                    {contribution}
+                  </li>
+                  ))}
+                </ul>
+                </div>
+              )}
+
+              {/* Links */}
+              {project.links && (
+                <div class="bg-white p-6 rounded-2xl shadow-sm">
+                <h3 class="font-display font-semibold text-dark mb-4">Liens</h3>
+                <div class="space-y-3">
+                  {project.links.map(link => (
+                  <a 
+                    href={link.href}
+                    class="flex items-center gap-2 text-primary hover:text-sand-600 transition-colors text-sm"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink class="w-4 h-4" />
+                    {link.label}
+                  </a>
+                  ))}
+                </div>
+                </div>
+              )}
+              </div>
+            )}
+            </div>
+
+          <!-- Gallery -->
+          {project.gallery && project.gallery.length > 0 && (
+            <div class="mb-12">
+              <h2 class="font-display text-2xl font-bold text-dark mb-8 text-center">
+                Galerie
+              </h2>
+              <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery">
+                {project.gallery.map((media, index) => {
+                  const isVideo = media.endsWith('.mp4') || media.endsWith('.webm') || media.endsWith('.ogg') || media.endsWith('.MOV') || media.endsWith('.mov');
+                  
+                  // Générer le nom de la miniature basé sur le nom de la vidéo
+                  let posterImage = '';
+                  if (isVideo) {
+                    const videoName = media.split('/').pop().replace(/\.[^/.]+$/, ''); // Remove extension
+                    posterImage = `/images/projects/video-thumbnails/${videoName}.jpg`;
+                  }
+                  
+                  return (
+                    <div 
+                      class="aspect-video bg-sand-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow cursor-pointer gallery-item relative"
+                      data-index={index}
+                    >
+                      {isVideo ? (
+                        <div class="relative w-full h-full">
+                          <video 
+                            src={media}
+                            poster={posterImage}
+                            class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            preload="metadata"
+                            muted={false}
+                            playsinline
+                            onloadstart="this.style.display='block'"
+                          >
+                            Votre navigateur ne supporte pas la lecture de vidéos.
+                          </video>
+                          </video>
+                          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="w-16 h-16 bg-black/50 rounded-full flex items-center justify-center backdrop-blur-sm">
+                              <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <img 
+                          src={media} 
+                          alt={`${project.title} - Image ${index + 1}`}
+                          class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                          loading="lazy"
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {project.document && (
+            <div class="mb-12">
+              <h2 class="font-display text-2xl font-bold text-dark mb-8 text-center">
+                Mémoire de recherche
+              </h2>
+              <div class="bg-white p-6 rounded-2xl shadow-sm">
+                <div class="flex items-center justify-between mb-4">
+                  <a 
+                    href={`/${project.document}`} 
+                    class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink class="w-4 h-4" />
+                    Ouvrir dans un nouvel onglet
+                  </a>
+                </div>
+                <div class="aspect-[4/3] bg-sand-100 rounded-lg overflow-hidden border border-sand-200">
+                  <iframe
+                    src={`/${project.document}#toolbar=1&navpanes=1&scrollbar=1`}
+                    class="w-full h-full"
+                    title="Document PDF"
+                    loading="lazy"
+                  >
+                    <p class="p-4 text-center text-dark/60">
+                      Votre navigateur ne supporte pas l'affichage de PDF. 
+                      <a href={`/${project.document}`} class="text-primary hover:underline">
+                        Cliquez ici pour télécharger le document
+                      </a>
+                    </p>
+                  </iframe>
+                </div>
+                <p class="text-sm text-dark/60 mt-2 text-center">
+                  Utilisez les contrôles du lecteur PDF pour naviguer dans le document
+                </p>
+              </div>
+            </div>
+          )}
+
+          <!-- Navigation to other projects -->
+          <div class="border-t border-sand-200 pt-12">
+            <div class="text-center mb-8">
+              <h3 class="font-display text-xl font-semibold text-dark mb-4">
+                Autres projets
+              </h3>
+              <p class="text-dark/60">
+                Découvrez d'autres réalisations
+              </p>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button href="/projets" variant="primary">
+                Voir tous les projets
+              </Button>
+              <Button href="/contact" variant="outline">
+                Discuter d'un projet
+              </Button>
+            </div>
+          </div>
+        </div>
+      </Container>
+    </Section>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 bg-black/80 z-50 hidden items-center justify-center p-4">
+      <div class="relative max-w-xl max-h-full">
+        <div class="absolute -top-12 right-0 flex gap-3">
+          <button 
+            id="zoom-toggle"
+            class="text-white hover:text-sand-200 transition-colors text-xl"
+            aria-label="Agrandir/Réduire"
+          >
+            🔍
+          </button>
+          <button 
+            id="close-lightbox"
+            class="text-white hover:text-sand-200 transition-colors text-xl"
+            aria-label="Fermer"
+          >
+            ✕
+          </button>
+        </div>
+        <div id="lightbox-content" class="max-w-full max-h-full transition-transform duration-300">
+          <img 
+            id="lightbox-image" 
+            src="" 
+            alt=""
+            class="z-15 max-w-full max-h-full object-contain rounded-lg hidden"
+          />
+          <video 
+            id="lightbox-video"
+            src=""
+            poster=""
+            class="max-w-full max-h-full object-contain rounded-lg hidden"
+            controls
+            preload="metadata"
+          >
+            Votre navigateur ne supporte pas la lecture de vidéos.
+          </video>
+        </div>
+        <div class="absolute py-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+          <button 
+            id="prev-image"
+            class="z-10 px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors"
+          >
+            ← Précédent
+          </button>
+          <button 
+            id="next-image"
+            class="z-10 px-4 py-2 bg-white/20 text-white rounded-lg hover:bg-white/30 transition-colors"
+          >
+            Suivant →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12">
+      <Container>
+        <div class="text-center">
+          <h3 class="font-display font-bold text-xl text-primary mb-4">Un projet similaire en tête ?</h3>
+          <p class="text-white/70 mb-6">Contactez-moi pour discuter de vos besoins en sensibilisation environnementale.</p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/contact" class="inline-flex items-center justify-center px-6 py-3 border-2 border-white text-white rounded-2xl hover:bg-white hover:text-dark transition-colors">
+              Me contacter
+            </a>
+          </div>
+        </div>
+      </Container>
+    </footer>
+  </div>
+
+  <script define:vars={{ gallery: project.gallery || [] }}>
+    // Lightbox functionality
+    if (gallery.length > 0) {
+      let currentImageIndex = 0;
+      
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImage = document.getElementById('lightbox-image');
+      const lightboxVideo = document.getElementById('lightbox-video');
+      const closeLightbox = document.getElementById('close-lightbox');
+      const prevImage = document.getElementById('prev-image');
+      const nextImage = document.getElementById('next-image');
+      const galleryItems = document.querySelectorAll('.gallery-item');
+
+      function isVideo(url) {
+        return url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.ogg') || url.endsWith('.MOV') || url.endsWith('.mov');
+      }
+
+      function getPosterImage(videoUrl) {
+        const videoName = videoUrl.split('/').pop().replace(/\.[^/.]+$/, '');
+        return `/images/projects/video-thumbnails/${videoName}.jpg`;
+      }
+
+      function openLightbox(index) {
+        currentImageIndex = index;
+        const mediaUrl = gallery[index];
+        
+        // Reset zoom
+        isZoomed = false;
+        lightboxContent.style.transform = 'scale(1)';
+        lightboxContent.style.cursor = 'zoom-in';
+        zoomToggle.textContent = '🔍';
+        
+        // Reset navigation buttons visibility
+        prevButton.style.opacity = '1';
+        prevButton.style.pointerEvents = 'auto';
+        nextButton.style.opacity = '1';
+        nextButton.style.pointerEvents = 'auto';
+        
+        if (isVideo(mediaUrl)) {
+          lightboxImage.classList.add('hidden');
+          lightboxVideo.classList.remove('hidden');
+          lightboxVideo.src = mediaUrl;
+          lightboxVideo.poster = getPosterImage(mediaUrl);
+        } else {
+          lightboxVideo.classList.add('hidden');
+          lightboxImage.classList.remove('hidden');
+          lightboxImage.src = mediaUrl;
+          lightboxImage.alt = `Gallery image ${index + 1}`;
+        }
+        
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightboxFn() {
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+        document.body.style.overflow = 'auto';
+        
+        // Pause video if playing
+        if (!lightboxVideo.classList.contains('hidden')) {
+          lightboxVideo.pause();
+        }
+      }
+
+      function showPrevImage() {
+        currentImageIndex = currentImageIndex > 0 ? currentImageIndex - 1 : gallery.length - 1;
+        const mediaUrl = gallery[currentImageIndex];
+        
+        if (isVideo(mediaUrl)) {
+          lightboxImage.classList.add('hidden');
+          lightboxVideo.classList.remove('hidden');
+          lightboxVideo.src = mediaUrl;
+          lightboxVideo.poster = getPosterImage(mediaUrl);
+        } else {
+          lightboxVideo.classList.add('hidden');
+          lightboxImage.classList.remove('hidden');
+          lightboxImage.src = mediaUrl;
+        }
+      }
+
+      function showNextImage() {
+        currentImageIndex = currentImageIndex < gallery.length - 1 ? currentImageIndex + 1 : 0;
+        const mediaUrl = gallery[currentImageIndex];
+        
+        if (isVideo(mediaUrl)) {
+          lightboxImage.classList.add('hidden');
+          lightboxVideo.classList.remove('hidden');
+          lightboxVideo.src = mediaUrl;
+          lightboxVideo.poster = getPosterImage(mediaUrl);
+        } else {
+          lightboxVideo.classList.add('hidden');
+          lightboxImage.classList.remove('hidden');
+          lightboxImage.src = mediaUrl;
+        }
+      }
+
+      // Zoom functionality
+      let isZoomed = false;
+      const lightboxContent = document.getElementById('lightbox-content');
+      const zoomToggle = document.getElementById('zoom-toggle');
+      const prevButton = document.getElementById('prev-image');
+      const nextButton = document.getElementById('next-image');
+
+      function toggleZoom() {
+        isZoomed = !isZoomed;
+        if (isZoomed) {
+          lightboxContent.style.transform = 'scale(1.8)';
+          lightboxContent.style.cursor = 'zoom-out';
+          zoomToggle.textContent = '🔍-';
+          // Masquer les boutons de navigation
+          prevButton.style.opacity = '0';
+          prevButton.style.pointerEvents = 'none';
+          nextButton.style.opacity = '0';
+          nextButton.style.pointerEvents = 'none';
+        } else {
+          lightboxContent.style.transform = 'scale(1)';
+          lightboxContent.style.cursor = 'zoom-in';
+          zoomToggle.textContent = '🔍';
+          // Afficher les boutons de navigation
+          prevButton.style.opacity = '1';
+          prevButton.style.pointerEvents = 'auto';
+          nextButton.style.opacity = '1';
+          nextButton.style.pointerEvents = 'auto';
+        }
+      }
+
+      // Event listeners
+      galleryItems.forEach((item, index) => {
+        item.addEventListener('click', () => openLightbox(index));
+      });
+
+      closeLightbox.addEventListener('click', closeLightboxFn);
+      prevImage.addEventListener('click', showPrevImage);
+      nextImage.addEventListener('click', showNextImage);
+      zoomToggle.addEventListener('click', toggleZoom);
+
+      // Close on escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightboxFn();
+        if (e.key === 'ArrowLeft') showPrevImage();
+        if (e.key === 'ArrowRight') showNextImage();
+        if (e.key === 'z' || e.key === 'Z') toggleZoom();
+      });
+
+      // Close on backdrop click
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightboxFn();
+      });
+    }
+  </script>
+</Layout>
