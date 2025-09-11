@@ -6,4 +6,7 @@ export default defineConfig({
   output: 'static',
   site: 'https://maelle-geographe.fr',
   compressHTML: true,
+  build: {
+    format: 'directory',
+  },
 });
