@@ -4,7 +4,10 @@ import Container from '@/components/ui/Container.astro';
 import Section from '@/components/ui/Section.astro';
 import Button from '@/components/ui/Button.astro';
 import { siteData } from '@/data/site';
+import { getFeaturedProjects } from '@/data/projects';
 import { Mail, MapPin, Calendar, MessageCircle } from 'lucide-astro';
+
+const featuredProjects = getFeaturedProjects();
 ---
 
 <Layout>
@@ -19,11 +22,7 @@ import { Mail, MapPin, Calendar, MessageCircle } from 'lucide-astro';
           <div class="hidden md:flex items-center space-x-8">
             <a href="/parcours" class="text-dark hover:text-primary transition-colors">Parcours</a>
             <a href="/projets" class="text-dark hover:text-primary transition-colors">Projets</a>
-            <a href="/contact" class="text-dark hover:text-primary transition-colors">Contact</a>
           </div>
-          <Button href="/contact" variant="primary" size="sm">
-            Discutons
-          </Button>
         </div>
       </Container>
     </nav>
@@ -37,17 +36,16 @@ import { Mail, MapPin, Calendar, MessageCircle } from 'lucide-astro';
             <span class="text-primary block">de projet</span>
           </h1>
           <p class="text-xl text-dark/80 mb-4 max-w-2xl mx-auto leading-relaxed">
-            Native de Charente-Maritime, je suis partie à Angoulême puis à Bordeaux dans le cadre de mes études. Fraîchement diplômée, je suis de retour sur la côte charentaise.
-            En quelques mots, je suis chargée de projet en géographe de formation, artistise à mes heures perdues, passionner par le monde qui nous entoure et comprendre les territoires.
+            Native de Charente-Maritime, j'ai posé mes valises d'abord à Angoulême puis à Bordeaux pour mes études. Fraîchement diplômée, je suis de retour sur la côte charentaise. En quelques mots, je suis chargée de projet et géographe de formation, artiste à mes heures perdues, je suis passionnée par le monde qui m'entoure et j'aime comprendre le fonctionnement des territoires.
               <p class="text-xl text-dark/80 mb-8 max-w-2xl mx-auto leading-relaxed">
-                De nature joviale j’aime rire, me divertir et apprendre de nouvelles choses chaque jour. Je suis une personne entière qui apprécie que les choses soient dites sans ambigüité. J’aime les relations humaines et débattre sur n’importe quel sujet.
+                De nature joviale, j’aime rire, me divertir et apprendre de nouvelles choses constamment. Je suis une personne entière qui apprécie que les choses soient dites sans ambigüité. Responsable, autonome, organisé et méthodique sont des termes qui me correspondent très bien.
               </p>
           </p>
           <div class="flex flex-col sm:flex-row gap-4 justify-center mt-4">
             <Button href="/projets" variant="primary" size="lg">
               Découvrir mes projets
             </Button>
-            <Button href="/contact" variant="outline" size="lg">
+            <Button href="mailto:maellelanglais10@hotmail.fr" variant="outline" size="lg">
               <MessageCircle class="w-5 h-5" /> 
               Contactez moi
             </Button>
@@ -64,69 +62,38 @@ import { Mail, MapPin, Calendar, MessageCircle } from 'lucide-astro';
           <h2 class="font-display text-3xl md:text-4xl font-bold text-dark mb-4">
             Projets phares
           </h2>
-          <p class="text-lg text-dark/70 max-w-2xl mx-auto">
-            Une sélection de mes réalisations en sensibilisation environnementale et communication visuelle
-          </p>
         </div>
         
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <!-- Project Cards will be added here -->
-          <div class="bg-cream rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
-            <div class="aspect-video bg-sand-200"></div>
-            <div class="p-6">
-              <div class="flex flex-wrap gap-2 mb-3">
-                <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">littoral</span>
-                <span class="px-3 py-1 bg-atlantic/10 text-atlantic text-sm rounded-full">affiche</span>
+          {featuredProjects.map((project) => (
+            <div class="bg-cream rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
+              <div class="aspect-video bg-sand-200 overflow-hidden">
+                <img 
+                  src={project.cover} 
+                  alt={project.title}
+                  class="w-full h-full object-cover"
+                />
               </div>
-              <h3 class="font-display text-xl font-semibold text-dark mb-2">
-                « Ne touche pas à ma dune »
-              </h3>
-              <p class="text-dark/70 text-sm mb-4">
-                Série d'affiches pédagogiques sur la fragilité des dunes destinées aux plages touristiques.
-              </p>
-              <Button href="/projets/sensibilisation-dunes" variant="outline" size="sm">
-                Voir le projet
-              </Button>
-            </div>
-          </div>
-          
-          <div class="bg-cream rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
-            <div class="aspect-video bg-salicornes/20"></div>
-            <div class="p-6">
-              <div class="flex flex-wrap gap-2 mb-3">
-                <span class="px-3 py-1 bg-salicornes/10 text-salicornes text-sm rounded-full">zones humides</span>
-                <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">infographie</span>
+              <div class="p-6">
+                <div class="flex flex-wrap gap-2 mb-3">
+                  {project.tags.slice(0, 2).map((tag) => (
+                    <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <h3 class="font-display text-xl font-semibold text-dark mb-2">
+                  {project.title}
+                </h3>
+                <p class="text-dark/70 text-sm mb-4">
+                  {project.summary}
+                </p>
+                <Button href={`/projets/${project.slug}`} variant="outline" size="sm">
+                  Voir le projet
+                </Button>
               </div>
-              <h3 class="font-display text-xl font-semibold text-dark mb-2">
-                Lagunage & Biodiversité
-              </h3>
-              <p class="text-dark/70 text-sm mb-4">
-                Schémas explicatifs pour valoriser un système de lagunage naturel.
-              </p>
-              <Button href="/projets/lagunage-biodiversite" variant="outline" size="sm">
-                Voir le projet
-              </Button>
             </div>
-          </div>
-          
-          <div class="bg-cream rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow md:col-span-2 lg:col-span-1">
-            <div class="aspect-video bg-atlantic/20"></div>
-            <div class="p-6">
-              <div class="flex flex-wrap gap-2 mb-3">
-                <span class="px-3 py-1 bg-atlantic/10 text-atlantic text-sm rounded-full">affiche</span>
-                <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">cinéma</span>
-              </div>
-              <h3 class="font-display text-xl font-semibold text-dark mb-2">
-                Affiche « Traverser »
-              </h3>
-              <p class="text-dark/70 text-sm mb-4">
-                Création d'affiche pour un film documentaire universitaire.
-              </p>
-              <Button href="/projets/traverser-affiche-film" variant="outline" size="sm">
-                Voir le projet
-              </Button>
-            </div>
-          </div>
+          ))}
         </div>
         
         <div class="text-center mt-12">
@@ -137,68 +104,18 @@ import { Mail, MapPin, Calendar, MessageCircle } from 'lucide-astro';
       </Container>
     </Section>
 
-    <!-- Contact CTA -->
-    <Section class="py-20 bg-primary">
-      <Container>
-        <div class="text-center text-white">
-          <h2 class="font-display text-3xl md:text-4xl font-bold mb-4">
-            Un projet en tête ?
-          </h2>
-          <p class="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
-            Discutons de votre projet et voyons comment je peux vous accompagner 
-            vers un développement territorial plus durable.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button href="/contact" variant="white" size="lg">
-              <Mail class="w-5 h-5" />
-              Me contacter
-            </Button>
-            <Button href={siteData.calendly} variant="outline-white" size="lg" external>
-              <Calendar class="w-5 h-5" />
-              Réserver un créneau
-            </Button>
-          </div>
-        </div>
-      </Container>
-    </Section>
-
     <!-- Footer -->
     <footer class="bg-dark text-white py-12">
       <Container>
-        <div class="grid md:grid-cols-3 gap-8 mb-8">
-          <div>
-            <h3 class="font-display font-bold text-xl text-primary mb-4">{siteData.name}</h3>
-            <p class="text-white/70 mb-4">
-              Géographe spécialisée en tourisme durable et gestion du littoral.
-            </p>
-            <div class="flex items-center text-white/70 mb-2">
-              <MapPin class="w-4 h-4 mr-2" />
-              {siteData.location}
-            </div>
-            <div class="flex items-center text-white/70">
-              <Mail class="w-4 h-4 mr-2" />
-              {siteData.email}
-            </div>
-          </div>
-          
+        <div class="flex justify-between mb-8">
           <div>
             <h4 class="font-semibold mb-4">Navigation</h4>
             <ul class="space-y-2 text-white/70">
               <li><a href="/parcours" class="hover:text-white transition-colors">Parcours</a></li>
               <li><a href="/projets" class="hover:text-white transition-colors">Projets</a></li>
-              <li><a href="/contact" class="hover:text-white transition-colors">Contact</a></li>
+              <li><a href="mailto:maellelanglais10@hotmail.fr" class="hover:text-white transition-colors">Contact</a></li>
             </ul>
           </div>
-          
-          <div>
-            <h4 class="font-semibold mb-4">Suivez-moi</h4>
-            <ul class="space-y-2 text-white/70">
-              <li><a href={siteData.social.linkedin} class="hover:text-white transition-colors" target="_blank">LinkedIn</a></li>
-              <li><a href={siteData.social.twitter} class="hover:text-white transition-colors" target="_blank">Twitter</a></li>
-              <li><a href={siteData.social.instagram} class="hover:text-white transition-colors" target="_blank">Instagram</a></li>
-            </ul>
-          </div>
-        </div>
         
         <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-white/60 text-sm">
           <p>&copy; 2024 {siteData.name}. Tous droits réservés.</p>

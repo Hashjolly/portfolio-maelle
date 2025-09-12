@@ -54,7 +54,7 @@ J'ai développé une série d'affiches avec :
       'Création des visuels',
       'Présentation de la série d’affiche aux élus de la commune pour choisir le visuel final',
     ],
-    featured: true,
+    featured: false,
   },
   {
     slug: 'lagunage-biodiversite',
@@ -76,7 +76,7 @@ J'ai développé une série d'affiches avec :
       'Création de visuels pédagogiques',
       'Sensibilisation auprès du public',
     ],
-    featured: true,
+    featured: false,
   },
   {
     slug: 'traverser-film',
@@ -109,6 +109,7 @@ Notre choix d'interviewer *deux étudiants* était stratégique :
 Au-delà des infrastructures, le documentaire explore la vision des habitants sur la Garonne : qu'apporte-t-elle à leur quotidien ? Comment perçoivent-ils ce fleuve qui traverse leur ville ?`,
     synopsis:
       'Le film plonge au cœur du quotidien des habitants bordelais, en explorant leur relation intime avec la Garonne, le fleuve qui façonne la vie de la ville.',
+    featured: true,
   },
   {
     slug: 'offre-scolaire-charentes',
@@ -139,6 +140,7 @@ Au-delà des infrastructures, le documentaire explore la vision des habitants su
       'Réalisation d’un module vidéo pédagogique et montage de capsules pour la formation',
       'Présentation du projet devant des élus et des acteurs institutionnels',
     ],
+    featured: true,
   },
   {
     slug: 'chateau-olivier',
@@ -183,7 +185,7 @@ Au-delà des infrastructures, le documentaire explore la vision des habitants su
       'analyse critique',
       'esprit de synthèse',
     ],
-    cover: '/images/projects/covers/logo_charente_tourisme.png',
+    cover: '/images/projects/covers/memoire_cover.jpg',
     summary:
       'Mémoire de recherche analysant la représentation de la nature dans les campings de Charente-Maritime.',
     context:
@@ -194,6 +196,7 @@ Au-delà des infrastructures, le documentaire explore la vision des habitants su
       'Les écarts entre la mise en avant marketing de la nature et les pratiques réelles des gestionnaires.',
     ],
     document: 'documents/MEMOIRE_LANGLAIS_MAELLE.pdf',
+    featured: true,
   },
   {
     slug: 'seminaire-portfolio-culturel',

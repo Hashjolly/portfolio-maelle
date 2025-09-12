@@ -20,7 +20,6 @@ const description = 'Mentions légales du site de Maëlle Langlais, géographe s
           <div class="hidden md:flex items-center space-x-8">
             <a href="/parcours" class="text-dark hover:text-primary transition-colors">Parcours</a>
             <a href="/projets" class="text-dark hover:text-primary transition-colors">Projets</a>
-            <a href="/contact" class="text-dark hover:text-primary transition-colors">Contact</a>
           </div>
         </div>
       </Container>
@@ -40,10 +39,8 @@ const description = 'Mentions légales du site de Maëlle Langlais, géographe s
           <h3 class="font-display text-xl font-semibold text-dark mt-6 mb-3">Éditeur du site</h3>
           <p>
             <strong>Nom :</strong> {siteData.name}<br>
-            <strong>Statut :</strong> Entrepreneur individuel<br>
             <strong>Adresse :</strong> {siteData.location}<br>
             <strong>Email :</strong> <a href={`mailto:${siteData.email}`} class="text-primary hover:text-sand-600 transition-colors">{siteData.email}</a><br>
-            <strong>Téléphone :</strong> <a href={`tel:${siteData.phone}`} class="text-primary hover:text-sand-600 transition-colors">{siteData.phone}</a>
           </p>
 
           <h3 class="font-display text-xl font-semibold text-dark mt-6 mb-3">Directeur de publication</h3>
@@ -52,10 +49,10 @@ const description = 'Mentions légales du site de Maëlle Langlais, géographe s
           <h3 class="font-display text-xl font-semibold text-dark mt-6 mb-3">Hébergeur</h3>
           <p>
             Le site est hébergé par :<br>
-            <strong>Netlify Inc.</strong><br>
-            2325 3rd Street, Suite 296<br>
-            San Francisco, CA 94107<br>
-            États-Unis
+            <strong>Hugo JOLLY via Hostinger</strong><br>
+            61 Lordou Vironos Street<br>
+            6023 Larnaca<br>
+            Chypre
           </p>
 
           <h2 class="font-display text-2xl font-semibold text-dark mt-8 mb-4">Propriété intellectuelle</h2>
@@ -124,11 +121,10 @@ const description = 'Mentions légales du site de Maëlle Langlais, géographe s
           </p>
           <ul>
             <li>Par email : <a href={`mailto:${siteData.email}`} class="text-primary hover:text-sand-600 transition-colors">{siteData.email}</a></li>
-            <li>Par téléphone : <a href={`tel:${siteData.phone}`} class="text-primary hover:text-sand-600 transition-colors">{siteData.phone}</a></li>
           </ul>
 
           <p class="text-sm text-dark/60 mt-8">
-            <em>Dernière mise à jour : Septembre 2024</em>
+            <em>Dernière mise à jour : Septembre 2025</em>
           </p>
         </div>
       </Container>
