@@ -4,6 +4,9 @@ import Container from '@/components/ui/Container.astro';
 import Section from '@/components/ui/Section.astro';
 import Tag from '@/components/ui/Tag.astro';
 import Button from '@/components/ui/Button.astro';
+import Navigation from '@/components/ui/Navigation.astro';
+import Footer from '@/components/ui/Footer.astro';
+import AnimatedElement from '@/components/ui/AnimatedElement.astro';
 import { projectsData } from '@/data/projects';
 import { Filter, ExternalLink } from 'lucide-astro';
 
@@ -17,19 +20,7 @@ const allTags = [...new Set(projectsData.flatMap(project => project.tags))];
 <Layout title={title} description={description}>
   <div class="min-h-screen bg-gradient-to-br from-cream via-sand-50 to-sand-100">
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-cream/90 backdrop-blur-sm z-50 border-b border-sand-200">
-      <Container class="py-4">
-        <div class="flex items-center justify-between">
-          <a href="/" class="font-display font-bold text-xl text-primary hover:text-sand-600 transition-colors">
-            Maëlle Langlais
-          </a>
-          <div class="hidden md:flex items-center space-x-8">
-            <a href="/parcours" class="text-dark hover:text-primary transition-colors">Parcours</a>
-            <a href="/projets" class="text-primary font-medium">Projets</a>
-          </div>
-        </div>
-      </Container>
-    </nav>
+    <Navigation />
 
     <Section class="pt-32 pb-20">
       <Container>
@@ -191,4 +182,7 @@ const allTags = [...new Set(projectsData.flatMap(project => project.tags))];
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', initializeFilters);
   </script>
+
+  <!-- Footer -->
+  <Footer />
 </Layout>
