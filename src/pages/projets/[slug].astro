@@ -100,14 +100,14 @@ const description = project.summary;
               <div class={(!project.contributions && !project.outcomes && !project.links) ? 'max-w-xl mx-auto md:col-span-3' : 'md:col-span-2'}>
                 <div class="bg-white p-8 rounded-2xl shadow-sm mb-8">
                   <div class="flex items-center gap-3 mb-4">
-                    <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                    <div class="w-8 h-8 bg-purple/10 rounded-lg flex items-center justify-center">
                       <Film class="w-4 h-4 text-purple" />
                     </div>
                     <h2 class="font-display text-xl font-semibold text-dark">Synopsis</h2>
                   </div>
-                  <p class="text-dark/80 leading-relaxed">
+                  <div class="text-dark/80 text-sm leading-relaxed">
                     <MarkdownContent content={project.synopsis || ''} />
-                  </p>
+                  </div>
                 </div>
               </div>
             )}
@@ -119,7 +119,7 @@ const description = project.summary;
                 <div class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                 <Target class="w-4 h-4 text-primary" />
                 </div>
-                <h2 class="font-display text-xl font-semibold text-dark">Contexte</h2>
+                <h2 class="font-display text-xl font-semibold text-dark">Démarche</h2>
               </div>
               <p class="text-dark/80 leading-relaxed">
                 <MarkdownContent content={project.context || ''} />
@@ -196,9 +196,9 @@ const description = project.summary;
           {project.gallery && project.gallery.length > 0 && (
             <div class="mb-12">
               <h2 class="font-display text-2xl font-bold text-dark mb-8 text-center">
-                Galerie
+                {project.gallery.some(media => media.match(/\.(mp4|webm|ogg|mov|MOV)$/)) ? 'Vidéo' : 'Galerie'}
               </h2>
-              <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="gallery">
+              <div class="flex flex-align-center flex-justify-center gap-5 flex-col sm:flex-row" id="gallery">
                 {project.gallery.map((media, index) => {
                   const isVideo = media.endsWith('.mp4') || media.endsWith('.webm') || media.endsWith('.ogg') || media.endsWith('.MOV') || media.endsWith('.mov');
                   
@@ -335,7 +335,7 @@ const description = project.summary;
             id="lightbox-image" 
             src="" 
             alt=""
-            class="z-15 max-w-full max-h-full object-contain rounded-lg hidden"
+            class="z-15 max-w-auto max-h-[55vh] object-contain rounded-lg hidden"
           />
           <video 
             id="lightbox-video"

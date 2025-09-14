@@ -70,7 +70,7 @@ export const timelineData: TimelineEvent[] = [
     location: 'Université Bordeaux Montaigne, Pessac (33)',
     description: `Parcours géographie sociales et politiques, développement des territoires`,
     types: ['Certification', 'Formation'],
-    tags: ['techniques d’enquêtes', 'interactions sociétés et milieux', 'droit', 'SIG'],
+    tags: ['techniques d’enquêtes', 'interactions sociétés et milieux', 'droit', 'Cartographie'],
   },
   {
     year: 2018,
@@ -92,7 +92,7 @@ export const timelineData: TimelineEvent[] = [
     tags: ['animation', 'encadrement', 'pédagogie'],
   },
   {
-    year: 2017,
+    years: [2017, 2018],
     title: 'Service civique',
     location: 'École élémentaire Condorcet, Angoulême (16)',
     description: `
@@ -126,9 +126,7 @@ export const timelineData: TimelineEvent[] = [
     year: 2015,
     title: 'Baccalauréat Économique et Social',
     location: 'Lycée Bellevue, Saintes (17)',
-    description: `**Diplôme de fin d'études secondaires** :
-      
-- Option **Sciences politiques**`,
+    description: `- Option **Sciences politiques**`,
     types: ['Certification'],
   },
 ] as const;
