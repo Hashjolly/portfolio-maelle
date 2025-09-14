@@ -1,0 +1,104 @@
+---
+export interface Props {
+  animation?: 'fade-up' | 'fade-down' | 'fade-left' | 'fade-right' | 'scale' | 'rotate';
+  delay?: number;
+  duration?: number;
+  class?: string;
+}
+
+const { animation = 'fade-up', delay = 0, duration = 600, class: className = '' } = Astro.props;
+---
+
+<div
+  class={`animate-element ${className}`}
+  data-animation={animation}
+  data-delay={delay}
+  data-duration={duration}
+>
+  <slot />
+</div>
+
+<script>
+  // Intersection Observer pour les animations au scroll
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px',
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const element = entry.target as HTMLElement;
+        const animation = element.dataset.animation || 'fade-up';
+        const delay = parseInt(element.dataset.delay || '0');
+        const duration = parseInt(element.dataset.duration || '600');
+
+        setTimeout(() => {
+          element.classList.add('animate-in', `animate-${animation}`);
+          element.style.setProperty('--animation-duration', `${duration}ms`);
+        }, delay);
+
+        observer.unobserve(element);
+      }
+    });
+  }, observerOptions);
+
+  // Observer tous les éléments avec la classe animate-element
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.animate-element').forEach((el) => {
+      observer.observe(el);
+    });
+  });
+</script>
+
+<style>
+  .animate-element {
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+      opacity var(--animation-duration, 600ms) ease-out,
+      transform var(--animation-duration, 600ms) ease-out;
+  }
+
+  .animate-element.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Animations spécifiques */
+  .animate-element.animate-fade-up {
+    transform: translateY(30px);
+  }
+
+  .animate-element.animate-fade-down {
+    transform: translateY(-30px);
+  }
+
+  .animate-element.animate-fade-left {
+    transform: translateX(-30px);
+  }
+
+  .animate-element.animate-fade-right {
+    transform: translateX(30px);
+  }
+
+  .animate-element.animate-scale {
+    transform: scale(0.9);
+  }
+
+  .animate-element.animate-rotate {
+    transform: rotate(-5deg) scale(0.9);
+  }
+
+  .animate-element.animate-in.animate-fade-up,
+  .animate-element.animate-in.animate-fade-down,
+  .animate-element.animate-in.animate-fade-left,
+  .animate-element.animate-in.animate-fade-right {
+    transform: translateX(0) translateY(0);
+  }
+
+  .animate-element.animate-in.animate-scale,
+  .animate-element.animate-in.animate-rotate {
+    transform: scale(1) rotate(0deg);
+  }
+</style>

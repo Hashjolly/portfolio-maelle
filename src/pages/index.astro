@@ -11,116 +11,181 @@ const featuredProjects = getFeaturedProjects();
 ---
 
 <Layout>
-  <div class="min-h-screen bg-gradient-to-br from-cream via-sand-50 to-sand-100">
+  <style>
+    .bubble {
+      position: absolute;
+      border-radius: 9999px;
+      opacity: 0.7;
+      animation: bubbleFloat 6s ease-in-out infinite alternate;
+      will-change: transform, opacity;
+    }
+    @keyframes bubbleFloat {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.7;
+      }
+      50% {
+        transform: translateY(-30px) scale(1.1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-60px) scale(0.95);
+        opacity: 0.6;
+      }
+    }
+  </style>
+  <div class="min-h-screen animate-fade-in bg-gradient-to-br from-cream via-sand-50 to-sand-100">
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-cream/90 backdrop-blur-sm z-50 border-b border-sand-200">
+    <nav class="fixed top-0 z-50 w-full border-b border-sand-200 bg-cream/90 backdrop-blur-sm">
       <Container class="py-4">
         <div class="flex items-center justify-between">
-          <a href="/" class="font-display font-bold text-xl text-primary hover:text-sand-600 transition-colors">
+          <a
+            href="/"
+            class="font-display text-xl font-bold text-primary transition-colors hover:text-sand-600"
+          >
             {siteData.name}
           </a>
-          <div class="hidden md:flex items-center space-x-8">
-            <a href="/parcours" class="text-dark hover:text-primary transition-colors">Parcours</a>
-            <a href="/projets" class="text-dark hover:text-primary transition-colors">Projets</a>
+          <div class="hidden items-center space-x-8 md:flex">
+            <a href="/parcours" class="text-dark transition-colors hover:text-primary">Parcours</a>
+            <a href="/projets" class="text-dark transition-colors hover:text-primary">Projets</a>
           </div>
         </div>
       </Container>
     </nav>
 
     <!-- Hero Section -->
-    <Section class="pt-32 pb-20">
-      <Container class="flex flex-col md:flex-row items-center gap-12">
-        <div class="max-w-4xl mx-auto text-left">
-          <h1 class="font-display text-5xl md:text-6xl font-bold text-dark mb-8">
+    <Section class="animate-slide-up pb-20 pt-32">
+      <Container
+        class="relative z-10 flex animate-fade-in flex-col items-center gap-12 md:flex-row"
+      >
+        {/* Bulles flottantes décoratives */}
+        <div class="pointer-events-none absolute inset-0 z-0">
+          <div
+            class="bubble bg-primary/30"
+            style="left:-5%;top:20%;width:40px;height:40px;animation-delay:0s"
+          >
+          </div>
+          <div
+            class="bubble bg-sand-200/100"
+            style="left:105%;top:65%;width:65px;height:65px;animation-delay:0.5s"
+          >
+          </div>
+          <div
+            class="bubble bg-atlantic/30"
+            style="left:60%;top:90%;width:110px;height:110px;animation-delay:1s"
+          >
+          </div>
+          <div
+            class="bubble bg-salicornes/30"
+            style="left:-10%;top:60%;width:85px;height:85px;animation-delay:1.5s"
+          >
+          </div>
+          <div
+            class="bubble bg-purple/30"
+            style="left:55%;top:15%;width:55px;height:55px;animation-delay:2s"
+          >
+          </div>
+        </div>
+        <div class="mx-auto max-w-4xl text-left">
+          <h1 class="mb-8 font-display text-5xl font-bold text-dark md:text-6xl">
             Chargée
-            <span class="text-primary block">de projet</span>
+            <span class="block text-primary">de projet</span>
           </h1>
-          <p class="text-xl text-dark/80 mb-4 max-w-2xl mx-auto leading-relaxed">
-            Native de Charente-Maritime, j'ai posé mes valises d'abord à Angoulême puis à Bordeaux pour mes études. Fraîchement diplômée, je suis de retour sur la côte charentaise. En quelques mots, je suis chargée de projet et géographe de formation, artiste à mes heures perdues, je suis passionnée par le monde qui m'entoure et j'aime comprendre le fonctionnement des territoires.
-              <p class="text-xl text-dark/80 mb-8 max-w-2xl mx-auto leading-relaxed">
-                De nature joviale, j’aime rire, me divertir et apprendre de nouvelles choses constamment. Je suis une personne entière qui apprécie que les choses soient dites sans ambigüité. Responsable, autonome, organisé et méthodique sont des termes qui me correspondent très bien.
-              </p>
+          <p class="mx-auto mb-4 max-w-2xl text-xl leading-relaxed text-dark/80">
+            Native de Charente-Maritime, j'ai posé mes valises d'abord à Angoulême puis à Bordeaux
+            pour mes études. Fraîchement diplômée, je suis de retour sur la côte charentaise. En
+            quelques mots, je suis chargée de projet et géographe de formation, artiste à mes heures
+            perdues, je suis passionnée par le monde qui m'entoure et j'aime comprendre le
+            fonctionnement des territoires.
+            <p class="mx-auto mb-8 max-w-2xl text-xl leading-relaxed text-dark/80">
+              De nature joviale, j’aime rire, me divertir et apprendre de nouvelles choses
+              constamment. Je suis une personne entière qui apprécie que les choses soient dites
+              sans ambigüité. Responsable, autonome, organisé et méthodique sont des termes qui me
+              correspondent très bien.
+            </p>
           </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center mt-4">
-            <Button href="/projets" variant="primary" size="lg">
-              Découvrir mes projets
-            </Button>
+          <div class="mt-4 flex flex-col justify-center gap-4 sm:flex-row">
+            <Button href="/projets" variant="primary" size="lg"> Découvrir mes projets </Button>
             <Button href="mailto:maellelanglais10@hotmail.fr" variant="outline" size="lg">
-              <MessageCircle class="w-5 h-5" /> 
+              <MessageCircle class="h-5 w-5" />
               Contactez moi
             </Button>
           </div>
         </div>
-        <img src="/images/photo_de_profil.png" alt="Maëlle Langlais" class="w-96 h-auto rounded-full border-4 border-white shadow-md" />
+        <img
+          src="/images/photo_de_profil.png"
+          alt="Maëlle Langlais"
+          class="h-auto w-96 rounded-full border-4 border-white shadow-md"
+        />
       </Container>
     </Section>
 
     <!-- Featured Projects Preview -->
-    <Section class="py-20 bg-white">
+    <Section class="bg-white py-20">
       <Container>
-        <div class="text-center mb-16">
-          <h2 class="font-display text-3xl md:text-4xl font-bold text-dark mb-4">
-            Projets phares
-          </h2>
+        <div class="mb-16 text-center">
+          <h2 class="mb-4 font-display text-3xl font-bold text-dark md:text-4xl">Projets phares</h2>
         </div>
-        
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredProjects.map((project) => (
-            <div class="bg-cream rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow">
-              <div class="aspect-video bg-sand-200 overflow-hidden">
-                <img 
-                  src={project.cover} 
-                  alt={project.title}
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <div class="p-6">
-                <div class="flex flex-wrap gap-2 mb-3">
-                  {project.tags.slice(0, 2).map((tag) => (
-                    <span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">
-                      {tag}
-                    </span>
-                  ))}
+
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {
+            featuredProjects.map((project) => (
+              <div class="overflow-hidden rounded-2xl bg-cream shadow-sm transition-shadow hover:shadow-lg">
+                <div class="aspect-video overflow-hidden bg-sand-200">
+                  <img src={project.cover} alt={project.title} class="h-full w-full object-cover" />
                 </div>
-                <h3 class="font-display text-xl font-semibold text-dark mb-2">
-                  {project.title}
-                </h3>
-                <p class="text-dark/70 text-sm mb-4">
-                  {project.summary}
-                </p>
-                <Button href={`/projets/${project.slug}`} variant="outline" size="sm">
-                  Voir le projet
-                </Button>
+                <div class="p-6">
+                  <div class="mb-3 flex flex-wrap gap-2">
+                    {project.tags.slice(0, 2).map((tag) => (
+                      <span class="rounded-full bg-primary/10 px-3 py-1 text-sm text-primary">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <h3 class="mb-2 font-display text-xl font-semibold text-dark">{project.title}</h3>
+                  <p class="mb-4 text-sm text-dark/70">{project.summary}</p>
+                  <Button href={`/projets/${project.slug}`} variant="outline" size="sm">
+                    Voir le projet
+                  </Button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          }
         </div>
-        
-        <div class="text-center mt-12">
-          <Button href="/projets" variant="primary">
-            Voir tous les projets
-          </Button>
+
+        <div class="mt-12 text-center">
+          <Button href="/projets" variant="primary"> Voir tous les projets </Button>
         </div>
       </Container>
     </Section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-12">
+    <footer class="bg-dark py-12 text-white">
       <Container>
-        <div class="flex justify-between mb-8">
+        <div class="mb-8 flex justify-between">
           <div>
-            <h4 class="font-semibold mb-4">Navigation</h4>
+            <h4 class="mb-4 font-semibold">Navigation</h4>
             <ul class="space-y-2 text-white/70">
-              <li><a href="/parcours" class="hover:text-white transition-colors">Parcours</a></li>
-              <li><a href="/projets" class="hover:text-white transition-colors">Projets</a></li>
-              <li><a href="mailto:maellelanglais10@hotmail.fr" class="hover:text-white transition-colors">Contact</a></li>
+              <li><a href="/parcours" class="transition-colors hover:text-white">Parcours</a></li>
+              <li><a href="/projets" class="transition-colors hover:text-white">Projets</a></li>
+              <li>
+                <a
+                  href="mailto:maellelanglais10@hotmail.fr"
+                  class="transition-colors hover:text-white">Contact</a
+                >
+              </li>
             </ul>
           </div>
-        
-        <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-white/60 text-sm">
-          <p>&copy; 2024 {siteData.name}. Tous droits réservés.</p>
-          <div class="flex space-x-6 mt-4 md:mt-0">
-            <a href="/mentions-legales" class="hover:text-white transition-colors">Mentions légales</a>
+
+          <div
+            class="flex flex-col items-center justify-between border-t border-white/10 pt-8 text-sm text-white/60 md:flex-row"
+          >
+            <p>&copy; 2024 {siteData.name}. Tous droits réservés.</p>
+            <div class="mt-4 flex space-x-6 md:mt-0">
+              <a href="/mentions-legales" class="transition-colors hover:text-white"
+                >Mentions légales</a
+              >
+            </div>
           </div>
         </div>
       </Container>

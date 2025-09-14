@@ -25,6 +25,25 @@ export default {
           900: '#5A362B',
         },
       },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(30px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        scaleIn: {
+          '0%': { transform: 'scale(0.95)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+      },
+      animation: {
+        'fade-in': 'fadeIn 0.6s cubic-bezier(0.4,0,0.2,1) both',
+        'slide-up': 'slideUp 1.2s cubic-bezier(0.4,0,0.2,1) both',
+        'scale-in': 'scaleIn 1.2s cubic-bezier(0.4,0,0.2,1) both',
+      },
       fontFamily: {
         display: ['Playfair Display', 'serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],

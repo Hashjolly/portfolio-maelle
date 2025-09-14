@@ -4,6 +4,7 @@ import Container from '@/components/ui/Container.astro';
 import Section from '@/components/ui/Section.astro';
 import Tag from '@/components/ui/Tag.astro';
 import MarkdownContent from '@/components/ui/MarkdownContent.astro';
+import AnimatedElement from '@/components/ui/AnimatedElement.astro';
 import { timelineData } from '@/data/timeline';
 import { aboutData } from '@/data/about';
 import { MapPin, Calendar, Award, Settings, Lightbulb } from 'lucide-astro';
@@ -32,15 +33,15 @@ const description = 'Découvrez mon parcours académique et professionnel en gé
     <Section class="pt-32 pb-20">
       <Container>
         <!-- Header -->
-        <div class="text-center mb-16">
+        <AnimatedElement animation="fade-up" class="text-center mb-16">
           <h1 class="font-display text-4xl md:text-5xl font-bold text-dark mb-6">
             Mon Parcours
           </h1>
-        </div>
+        </AnimatedElement>
 
         <!-- Skills & Tools -->
         <div class="grid md:grid-cols-3 gap-8 mb-20">
-          <div class="bg-white p-8 rounded-2xl shadow-sm">
+        <AnimatedElement animation="fade-up" delay={100} class="bg-white p-8 rounded-2xl shadow-sm">
             <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
               <Award class="w-6 h-6 text-primary" />
             </div>
@@ -50,9 +51,9 @@ const description = 'Découvrez mon parcours académique et professionnel en gé
                 <Tag variant="primary" size="sm">{skill}</Tag>
               ))}
             </div>
-          </div>
+          </AnimatedElement>
 
-          <div class="bg-white p-8 rounded-2xl shadow-sm">
+          <AnimatedElement animation="fade-up" delay={100} class="bg-white p-8 rounded-2xl shadow-sm">
             <div class="w-12 h-12 bg-atlantic/10 rounded-lg flex items-center justify-center mb-6">
               <Settings class="w-6 h-6 text-atlantic" />
             </div>
@@ -62,9 +63,9 @@ const description = 'Découvrez mon parcours académique et professionnel en gé
                 <Tag variant="secondary" size="sm">{tool}</Tag>
               ))}
             </div>
-          </div>
+          </AnimatedElement>
 
-          <div class="bg-white p-8 rounded-2xl shadow-sm">
+          <AnimatedElement animation="fade-up" delay={100} class="bg-white p-8 rounded-2xl shadow-sm">
             <div class="w-12 h-12 bg-salicornes/10 rounded-lg flex items-center justify-center mb-6">
               <Lightbulb class="w-6 h-6 text-salicornes" />
             </div>
@@ -74,33 +75,36 @@ const description = 'Découvrez mon parcours académique et professionnel en gé
                 <Tag variant="accent" size="sm">{skill}</Tag>
               ))}
             </div>
-          </div>
+          </AnimatedElement>
         </div>
 
         <!-- Timeline -->
         <div class="max-w-4xl mx-auto">
-          <h2 class="font-display text-3xl font-bold text-dark mb-12 text-center">
-            Timeline
-          </h2>
+          <AnimatedElement animation="fade-up" delay={400}>
+            <h2 class="font-display text-3xl font-bold text-dark mb-12 text-center">
+              Timeline
+            </h2>
+          </AnimatedElement>
           
           <div class="relative">
             <!-- Timeline line -->
-            <div class="absolute left-1/2 transform -translate-x-1/2 w-1 bg-sand-200 h-full"></div>
+            <div class="absolute left-1/2 transform -translate-x-1/2 w-1 bg-sand-200 h-full timeline-line"></div>
             
             <div class="space-y-12">
               {timelineData.map((event, index) => (
-                <div class={`relative flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
-                  <!-- Timeline dot -->
-                  <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-4 border-cream z-10"></div>
-                  
-                  <!-- Content -->
-                  <div class={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-left' : 'pl-8 text-left'}`}>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm">
-                      <div class="flex items-center gap-2 mb-2">
-                        {event.year ? (
-                          <span class="font-bold text-primary text-lg">{event.year}</span>
-                        ) : event.years ? (
-                          <span class="font-bold text-primary text-lg">{event.years[0]} - {event.years[1]}</span>
+                <AnimatedElement animation={index % 2 === 0 ? 'fade-right' : 'fade-left'} delay={200 + (index * 100)}>
+                  <div class={`relative flex items-center ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
+                    <!-- Timeline dot -->
+                    <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-primary rounded-full border-4 border-cream z-10 timeline-dot hover:scale-150 transition-transform duration-300"></div>
+                    
+                    <!-- Content -->
+                    <div class={`w-1/2 ${index % 2 === 0 ? 'pr-8 text-left' : 'pl-8 text-left'}`}>
+                      <div class="bg-white p-6 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-500 hover:scale-105 timeline-card">
+                        <div class="flex items-center gap-2 mb-2">
+                          {event.year ? (
+                            <span class="font-bold text-primary text-lg">{event.year}</span>
+                          ) : event.years ? (
+                            <span class="font-bold text-primary text-lg">{event.years[0]} - {event.years[1]}</span>
                         ) : null}
                         {event.types && (
                           <div class="flex flex-wrap gap-1">
@@ -135,6 +139,7 @@ const description = 'Découvrez mon parcours académique et professionnel en gé
                     </div>
                   </div>
                 </div>
+                </AnimatedElement>
               ))}
             </div>
           </div>
