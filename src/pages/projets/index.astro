@@ -8,129 +8,146 @@ import { projectsData } from '@/data/projects';
 import { Filter, ExternalLink } from 'lucide-astro';
 
 const title = 'Mes Projets';
-const description = 'Découvrez mes réalisations en sensibilisation environnementale, cartographie et communication visuelle pour la protection du littoral.';
+const description =
+  'Découvrez mes réalisations en sensibilisation environnementale, cartographie et communication visuelle pour la protection du littoral.';
 
 // Extract unique tags for filtering
-const allTags = [...new Set(projectsData.flatMap(project => project.tags))];
+const allTags = [...new Set(projectsData.flatMap((project) => project.tags))];
+
+// Sort projects by year descending
+const sortedProjects = [...projectsData].sort((a, b) => b.year - a.year);
 ---
 
 <Layout title={title} description={description}>
   <div class="min-h-screen bg-gradient-to-br from-cream via-sand-50 to-sand-100">
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-cream/90 backdrop-blur-sm z-50 border-b border-sand-200">
+    <nav class="fixed top-0 z-50 w-full border-b border-sand-200 bg-cream/90 backdrop-blur-sm">
       <Container class="py-4">
         <div class="flex items-center justify-between">
-          <a href="/" class="font-display font-bold text-xl text-primary hover:text-sand-600 transition-colors">
+          <a
+            href="/"
+            class="font-display text-xl font-bold text-primary transition-colors hover:text-sand-600"
+          >
             Maëlle Langlais
           </a>
-          <div class="hidden md:flex items-center space-x-8">
-            <a href="/parcours" class="text-dark hover:text-primary transition-colors">Parcours</a>
-            <a href="/projets" class="text-primary font-medium">Projets</a>
+          <div class="hidden items-center space-x-8 md:flex">
+            <a href="/parcours" class="text-dark transition-colors hover:text-primary">Parcours</a>
+            <a href="/projets" class="font-medium text-primary">Projets</a>
           </div>
         </div>
       </Container>
     </nav>
 
-    <Section class="pt-32 pb-20">
+    <Section class="pb-20 pt-32">
       <Container>
         <!-- Header -->
-        <div class="text-center mb-16">
-          <h1 class="font-display text-4xl md:text-5xl font-bold text-dark mb-6">
-            Mes Projets
-          </h1>
+        <div class="mb-16 text-center">
+          <h1 class="mb-6 font-display text-4xl font-bold text-dark md:text-5xl">Mes Projets</h1>
         </div>
 
         <!-- Filters -->
         <div class="mb-12">
-          <div class="flex items-center gap-4 mb-6">
-            <Filter class="w-5 h-5 text-dark/60" />
-            <span class="text-dark/60 font-medium">Filtrer par :</span>
+          <div class="mb-6 flex items-center gap-4">
+            <Filter class="h-5 w-5 text-dark/60" />
+            <span class="font-medium text-dark/60">Filtrer par :</span>
           </div>
           <div class="flex flex-wrap gap-2" id="filter-tags">
-            <button class="filter-tag active px-4 py-2 bg-primary text-white rounded-full text-sm font-medium transition-colors" data-tag="all">
+            <button
+              class="filter-tag active rounded-full bg-primary px-4 py-2 text-sm font-medium text-white transition-colors"
+              data-tag="all"
+            >
               Tous
             </button>
-            {allTags.map(tag => (
-              <button 
-                class="filter-tag px-4 py-2 bg-white border border-sand-200 text-dark hover:bg-primary hover:text-white rounded-full text-sm font-medium transition-colors"
-                data-tag={tag}
-              >
-                {tag}
-              </button>
-            ))}
+            {
+              allTags.map((tag) => (
+                <button
+                  class="filter-tag rounded-full border border-sand-200 bg-white px-4 py-2 text-sm font-medium text-dark transition-colors hover:bg-primary hover:text-white"
+                  data-tag={tag}
+                >
+                  {tag}
+                </button>
+              ))
+            }
           </div>
         </div>
 
         <!-- Projects Grid -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
-          {projectsData.map(project => (
-            <article 
-              class="project-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
-              data-tags={project.tags.join(',')}
-            >
-              <div class="aspect-video bg-sand-200 relative overflow-hidden">
-                <img 
-                  src={project.cover} 
-                  alt={project.title}
-                  class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
-                />
-                {project.featured && (
-                  <div class="absolute top-4 left-4">
-                    <Tag variant="primary">À la une</Tag>
-                  </div>
-                )}
-              </div>
-              
-              <div class="p-6">
-                <div class="flex flex-wrap gap-2 mb-3">
-                  {project.tags.slice(0, 3).map(tag => (
-                    <Tag variant="neutral" size="sm">{tag}</Tag>
-                  ))}
-                  {project.tags.length > 3 && (
-                    <Tag variant="neutral" size="sm">+{project.tags.length - 3}</Tag>
+        <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3" id="projects-grid">
+          {
+            sortedProjects.map((project) => (
+              <article
+                class="project-card overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-300 hover:shadow-lg"
+                data-tags={project.tags.join(',')}
+              >
+                <div class="relative aspect-video overflow-hidden bg-sand-200">
+                  <img
+                    src={project.cover}
+                    alt={project.title}
+                    class="h-full w-full object-cover transition-transform duration-300 hover:scale-105"
+                    loading="lazy"
+                  />
+                  {project.featured && (
+                    <div class="absolute left-4 top-4">
+                      <Tag variant="primary">À la une</Tag>
+                    </div>
                   )}
                 </div>
-                
-                <h3 class="font-display text-lg font-semibold text-dark mb-2 leading-tight">
-                  {project.title}
-                </h3>
-                
-                <p class="text-dark/70 text-sm leading-relaxed mb-4">
-                  {project.summary}
-                </p>
-                
-                <div class="flex items-center justify-between">
-                  <span class="text-primary font-medium text-sm">{project.year}</span>
-                  <Button href={`/projets/${project.slug}`} variant="outline" size="sm">
-                    Voir le projet
-                  </Button>
+
+                <div class="p-6">
+                  <div class="mb-3 flex flex-wrap gap-2">
+                    {project.tags.slice(0, 3).map((tag) => (
+                      <Tag variant="neutral" size="sm">
+                        {tag}
+                      </Tag>
+                    ))}
+                    {project.tags.length > 3 && (
+                      <Tag variant="neutral" size="sm">
+                        +{project.tags.length - 3}
+                      </Tag>
+                    )}
+                  </div>
+
+                  <h3 class="mb-2 font-display text-lg font-semibold leading-tight text-dark">
+                    {project.title}
+                  </h3>
+
+                  <p class="mb-4 text-sm leading-relaxed text-dark/70">{project.summary}</p>
+
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm font-medium text-primary">{project.year}</span>
+                    <Button href={`/projets/${project.slug}`} variant="outline" size="sm">
+                      Voir le projet
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))
+          }
         </div>
 
         <!-- No results message -->
-        <div id="no-results" class="hidden text-center py-20">
-          <p class="text-dark/60 text-lg">Aucun projet trouvé pour cette catégorie.</p>
-          <Button 
-            variant="outline" 
-            class="mt-4" 
-            onclick="resetFilters()"
+        <div id="no-results" class="hidden py-20 text-center">
+          <p class="text-lg text-dark/60">Aucun projet trouvé pour cette catégorie.</p>
+          <button
+            type="button"
+            class="mt-4 inline-flex items-center justify-center rounded-2xl border-2 border-primary px-6 py-3 font-medium text-primary transition-colors hover:bg-primary hover:text-white"
+            id="reset-filters-btn"
           >
             Voir tous les projets
-          </Button>
+          </button>
         </div>
       </Container>
     </Section>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-12">
+    <footer class="bg-dark py-12 text-white">
       <Container>
         <div class="text-center">
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="mailto:maellelanglais10@hotmail.fr" class="inline-flex items-center justify-center px-6 py-3 border-2 border-white text-white rounded-2xl hover:bg-white hover:text-dark transition-colors">
+          <div class="flex flex-col justify-center gap-4 sm:flex-row">
+            <a
+              href="mailto:maellelanglais10@hotmail.fr"
+              class="inline-flex items-center justify-center rounded-2xl border-2 border-white px-6 py-3 text-white transition-colors hover:bg-white hover:text-dark"
+            >
               Me contacter
             </a>
           </div>
@@ -142,51 +159,61 @@ const allTags = [...new Set(projectsData.flatMap(project => project.tags))];
   <script>
     // Filter functionality
     function initializeFilters() {
-      const filterTags = document.querySelectorAll('.filter-tag');
-      const projectCards = document.querySelectorAll('.project-card');
-      const noResults = document.getElementById('no-results');
+      const filterTags = document.querySelectorAll<HTMLButtonElement>('.filter-tag');
+      const projectCards = document.querySelectorAll<HTMLElement>('.project-card');
+      const noResults = document.getElementById('no-results') as HTMLElement | null;
 
-      filterTags.forEach(tag => {
-        tag.addEventListener('click', () => {
-          const selectedTag = tag.dataset.tag;
-          
+      filterTags.forEach((tagEl) => {
+        tagEl.addEventListener('click', () => {
+          const selectedTag = tagEl.dataset.tag || 'all';
+
           // Update active state
-          filterTags.forEach(t => t.classList.remove('active', 'bg-primary', 'text-white'));
-          filterTags.forEach(t => t.classList.add('bg-white', 'border', 'border-sand-200', 'text-dark'));
-          
-          tag.classList.add('active', 'bg-primary', 'text-white');
-          tag.classList.remove('bg-white', 'border', 'border-sand-200', 'text-dark');
+          filterTags.forEach((t) => t.classList.remove('active', 'bg-primary', 'text-white'));
+          filterTags.forEach((t) =>
+            t.classList.add('bg-white', 'border', 'border-sand-200', 'text-dark')
+          );
+
+          tagEl.classList.add('active', 'bg-primary', 'text-white');
+          tagEl.classList.remove('bg-white', 'border', 'border-sand-200', 'text-dark');
 
           // Filter projects
           let visibleCount = 0;
-          projectCards.forEach(card => {
-            const cardTags = card.dataset.tags.split(',');
-            const shouldShow = selectedTag === 'all' || cardTags.includes(selectedTag);
-            
+          projectCards.forEach((card) => {
+            const cardTags = card.dataset.tags?.split(',') || [];
+            const shouldShow =
+              selectedTag === 'all' || (selectedTag && cardTags.includes(selectedTag));
+
             if (shouldShow) {
-              card.style.display = 'block';
+              (card as HTMLElement).style.display = 'block';
               visibleCount++;
             } else {
-              card.style.display = 'none';
+              (card as HTMLElement).style.display = 'none';
             }
           });
 
           // Show/hide no results message
-          if (visibleCount === 0) {
-            noResults.classList.remove('hidden');
-          } else {
-            noResults.classList.add('hidden');
+          if (noResults) {
+            if (visibleCount === 0) {
+              noResults.classList.remove('hidden');
+            } else {
+              noResults.classList.add('hidden');
+            }
           }
         });
       });
     }
 
     function resetFilters() {
-      const allButton = document.querySelector('[data-tag="all"]');
-      if (allButton) {
-        allButton.click();
-      }
+      const allButton = document.querySelector<HTMLButtonElement>('[data-tag="all"]');
+      if (allButton) allButton.click();
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const resetBtn = document.getElementById('reset-filters-btn');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', resetFilters);
+      }
+    });
 
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', initializeFilters);
